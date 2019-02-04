@@ -1,8 +1,13 @@
 package ui;
 
 import java.awt.EventQueue;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import game.Game;
 import main.Main;
 import settings.Constants;
 
@@ -26,10 +31,48 @@ public class UI extends JFrame {
 
 
 	public UI() {
+		addKeyListener(new AL());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(400, 200, Constants.SCREEN_RESOLUTION_X, Constants.SCREEN_RESOLUTION_Y);
+		setBounds(0, 0, Constants.SCREEN_RESOLUTION_X, Constants.SCREEN_RESOLUTION_Y);
 		setContentPane(Main.game);
 		setVisible(true);
 	}
 
+	public class AL extends KeyAdapter {
+		public void keyPressed(KeyEvent e) {
+			int keyCode = e.getKeyCode();
+			switch (keyCode){
+			case KeyEvent.VK_LEFT:
+				Game.player.keyLeft = true;
+				break;
+			case KeyEvent.VK_RIGHT:
+				Game.player.keyRight = true;
+				break;
+			case KeyEvent.VK_UP:
+				Game.player.keyUp = true;
+				break;
+			case KeyEvent.VK_DOWN:
+				Game.player.keyDown = true;
+				break;
+			}
+		}
+		public void keyReleased(KeyEvent e) {
+			int keyCode = e.getKeyCode();
+			switch (keyCode){
+			case KeyEvent.VK_LEFT:
+				Game.player.keyLeft = false;
+				break;
+			case KeyEvent.VK_RIGHT:
+				Game.player.keyRight = false;
+				break;
+			case KeyEvent.VK_UP:
+				Game.player.keyUp = false;
+				break;
+			case KeyEvent.VK_DOWN:
+				Game.player.keyDown = false;
+				break;
+			}
+		}
+	}	
+	
 }
