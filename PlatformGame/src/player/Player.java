@@ -14,7 +14,7 @@ public class Player {
 	private double speedX = 0;
 	private double speedY = 0;
 	private double positionX = 0;
-	private double positionY = 70;
+	private double positionY = 76;
 	private Sprite sprite = new Sprite("adventurerSheet", Constants.SPRITE_SIZE_X, Constants.SPRITE_SIZE_Y);
 	
 	private Animation idle = new Animation(new BufferedImage[] {

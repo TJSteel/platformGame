@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
+import level.Level;
 import player.Player;
 import settings.Constants;
 
@@ -13,6 +14,7 @@ public class Game extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	public static Player player = new Player();
+	public static Level level = new Level(1);
 	
 	public Game() {
 		this.setPreferredSize(new Dimension(Constants.SCREEN_RESOLUTION_X, Constants.SCREEN_RESOLUTION_Y));
@@ -25,7 +27,8 @@ public class Game extends JPanel{
         g2d.scale(Constants.SIZE_MULTIPLIER, Constants.SIZE_MULTIPLIER);
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, Constants.GAME_RESOLUTION_X, Constants.GAME_RESOLUTION_Y);
-      	g2d.drawImage(player.getSprite(), player.getX(), player.getY(), Constants.SPRITE_SIZE_X, Constants.SPRITE_SIZE_Y, null);
+      	g2d.drawImage(level.drawLevel(), 0, 0, null);
+      	g2d.drawImage(player.getSprite(), player.getX(), player.getY(), null);
         g2d.setColor(Color.BLACK);
     }
     
