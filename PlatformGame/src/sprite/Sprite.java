@@ -6,24 +6,24 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import settings.Constants;
-
-
 public class Sprite {
 	private BufferedImage spriteSheet = null;
+	private int sizeX;
+	private int sizeY;
 	
-	public Sprite(String spriteName) {
+	public Sprite(String spriteName, int sizeX, int sizeY) {
 		loadSprite(spriteName);
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
 	}
 	
 	public BufferedImage getSprite(int x, int y) {
-		int size = Constants.TILE_SIZE;
-		x *= size;
-		y *= size;
-		if (x > (spriteSheet.getWidth() - size)) x = 0;
-		if (y > (spriteSheet.getHeight() - size)) y = 0;
+		x *= this.sizeX;
+		y *= this.sizeY;
+		if (x > (spriteSheet.getWidth() - this.sizeX)) x = 0;
+		if (y > (spriteSheet.getHeight() - this.sizeY)) y = 0;
 		
-		return spriteSheet.getSubimage(x, y, size, size);
+		return spriteSheet.getSubimage(x, y, this.sizeX, this.sizeY);
 	}
 	
 	private void loadSprite(String spriteName) {
@@ -40,15 +40,16 @@ public class Sprite {
 	private void loadBlankSprite() {
 		
 	}
-	public static final BufferedImage flipImage(BufferedImage img)
+	public static BufferedImage flipImage(BufferedImage img)
 	{
-		int size = Constants.TILE_SIZE;
+		int width = img.getWidth(null);
+		int height = img.getHeight(null);
 	    // Create a buffered image with transparency
-	    BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+	    BufferedImage bimage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
 	    // Draw the image on to the buffered image
 	    Graphics2D g2d = bimage.createGraphics();
-	    g2d.drawImage(img, size, 0, -size, size, null);
+	    g2d.drawImage(img, width, 0, -width, height, null);
 	    g2d.dispose();
 
 	    // Return the buffered image

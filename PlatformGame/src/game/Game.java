@@ -25,7 +25,7 @@ public class Game extends JPanel{
         g2d.scale(Constants.SIZE_MULTIPLIER, Constants.SIZE_MULTIPLIER);
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, Constants.GAME_RESOLUTION_X, Constants.GAME_RESOLUTION_Y);
-      	g2d.drawImage(player.getSprite(), player.getX(), player.getY(), Constants.TILE_SIZE, Constants.TILE_SIZE, null);
+      	g2d.drawImage(player.getSprite(), player.getX(), player.getY(), Constants.SPRITE_SIZE_X, Constants.SPRITE_SIZE_Y, null);
         g2d.setColor(Color.BLACK);
     }
     

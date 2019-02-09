@@ -14,51 +14,43 @@ public class Player {
 	private double speedX = 0;
 	private double speedY = 0;
 	private double positionX = 0;
-	private double positionY = 0;
-	private Sprite sprite = new Sprite("PlayerSprite");
+	private double positionY = 70;
+	private Sprite sprite = new Sprite("adventurerSheet", Constants.SPRITE_SIZE_X, Constants.SPRITE_SIZE_Y);
 	
-	private Animation standRight = new Animation(new BufferedImage[] {
-			sprite.getSprite(0, 0)
-			}, 0);
-	private Animation standLeft = new Animation(new BufferedImage[] {
-			Sprite.flipImage(sprite.getSprite(0, 0))
-			}, 0);
-	private Animation walkRight = new Animation(new BufferedImage[] {
-			sprite.getSprite(0, 0),
-			sprite.getSprite(1, 0),
-			sprite.getSprite(2, 0),
-			sprite.getSprite(1, 0),
-			sprite.getSprite(0, 0),
-			sprite.getSprite(4, 0),
-			sprite.getSprite(5, 0),
-			sprite.getSprite(4, 0)
-			}, 10);
-	private Animation walkLeft = new Animation(new BufferedImage[] {
-			Sprite.flipImage(sprite.getSprite(0, 0)),
-			Sprite.flipImage(sprite.getSprite(1, 0)),
-			Sprite.flipImage(sprite.getSprite(2, 0)),
-			Sprite.flipImage(sprite.getSprite(1, 0)),
-			Sprite.flipImage(sprite.getSprite(0, 0)),
-			Sprite.flipImage(sprite.getSprite(4, 0)),
-			Sprite.flipImage(sprite.getSprite(5, 0)),
-			Sprite.flipImage(sprite.getSprite(4, 0))
-			}, 10);
+	private Animation idle = new Animation(new BufferedImage[] {
+			sprite.getSprite(8, 9),
+			sprite.getSprite(9, 9),
+			sprite.getSprite(0, 10),
+			sprite.getSprite(1, 10)
+			}, 175);
+	private Animation crouch = new Animation(new BufferedImage[] {
+			sprite.getSprite(5, 6),
+			sprite.getSprite(6, 6),
+			sprite.getSprite(7, 6),
+			sprite.getSprite(8, 6)
+			}, 175);
+	private Animation walk = new Animation(new BufferedImage[] {
+			sprite.getSprite(7, 18),
+			sprite.getSprite(8, 18),
+			sprite.getSprite(9, 18),
+			sprite.getSprite(0, 19),
+			sprite.getSprite(1, 19),
+			sprite.getSprite(2, 19)
+			}, 100);
 	
-	
-	
-	
-	private Animation currentAnimation = standRight;
+	private Animation currentAnimation = idle;
+	private Direction direction = Direction.RIGHT;
 	
 	public boolean isAlive() {
 		return health > 0 ? true : false;
 	}
 	public BufferedImage getSprite() {
-		return currentAnimation.getSprite();
+		BufferedImage img = currentAnimation.getSprite();
+		if (this.direction == Direction.LEFT) img = Sprite.flipImage(img);
+		return img;
 	}
 	public void update() {
 		updatePlayerInputs();
-
-		
 		
 		currentAnimation.updateFrame();
 		positionX += speedX;
@@ -68,14 +60,16 @@ public class Player {
 		if (keyLeft == true ^ keyRight == true) {
 			if (keyLeft == true) {
 				speedX -= Constants.SPEED_INCREMENT;
-				if (currentAnimation != walkLeft) {
-					currentAnimation = walkLeft;
+				direction = Direction.LEFT;
+				if (currentAnimation != walk) {
+					currentAnimation = walk;
 					currentAnimation.reset();
 				}
 			} else {
 				speedX += Constants.SPEED_INCREMENT;
-				if (currentAnimation != walkRight) {
-					currentAnimation = walkRight;
+				direction = Direction.RIGHT;
+				if (currentAnimation != walk) {
+					currentAnimation = walk;
 					currentAnimation.reset();
 				}
 			}
@@ -85,14 +79,14 @@ public class Player {
 			if (speedX > 0) {
 				if (speedX <= Constants.SPEED_INCREMENT){
 					speedX = 0;
-					currentAnimation = standRight;
+					currentAnimation = idle;
 				} else {
 					speedX -= Constants.SPEED_INCREMENT;
 				}
 			} else if (speedX < 0) {
 				if (speedX >= -Constants.SPEED_INCREMENT) {
 					speedX = 0;
-					currentAnimation = standLeft;
+					currentAnimation = idle;
 				} else {
 					speedX += Constants.SPEED_INCREMENT;
 				}
