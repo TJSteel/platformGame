@@ -1,6 +1,7 @@
 package level;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import settings.Constants;
@@ -10,6 +11,8 @@ public class Level {
 	private Sprite sprite = new Sprite("tilesetSheet", Constants.TILE_SIZE, Constants.TILE_SIZE);
 	private int levelNumber;
 	private Tile[][] tiles;
+	private Background[] background;
+	
 	
 	public Level(int levelNumber) {
 		this.levelNumber = levelNumber;
@@ -28,11 +31,36 @@ public class Level {
 	    g2d.dispose();
 		return bimage;
 	}
+	
 	private BufferedImage getTile(Tile tile) {
 		BufferedImage imgTile;
 		switch (tile) {
+		case FLOOR_LEFT:
+			imgTile = sprite.getSprite(15, 7);
+			break;
 		case FLOOR_CENTER:
 			imgTile = sprite.getSprite(16, 7);
+			break;
+		case FLOOR_RIGHT:
+			imgTile = sprite.getSprite(17, 7);
+			break;
+		case GRASS:
+			imgTile = sprite.getSprite(16, 6);
+			break;
+		case MUD:
+			imgTile = sprite.getSprite(11, 6);
+			break;
+		case WALL_LEFT:
+			imgTile = sprite.getSprite(9, 6);
+			break;
+		case WALL_RIGHT:
+			imgTile = sprite.getSprite(13, 6);
+			break;
+		case MUD_WALL_BOTTOM_LEFT:
+			imgTile = sprite.getSprite(15, 9);
+			break;
+		case MUD_WALL_BOTTOM_RIGHT:
+			imgTile = sprite.getSprite(17, 9);
 			break;
 		default:
 			imgTile = sprite.getSprite(5, 0);
@@ -42,29 +70,310 @@ public class Level {
 	}
 	
 	private void loadLevel() {
-		Tile[][] tiles = new Tile[Constants.GAME_RESOLUTION_X / Constants.TILE_SIZE][Constants.GAME_RESOLUTION_Y / Constants.TILE_SIZE];
+		if (levelNumber == 1) {
+			Background[] bg = {
+					new Background("sky", 0, 0, 1, 0.1),
+					new Background("clouds", 0, 0.4, 0.3, 0.5),
+					new Background("sea", 0, 0.7, 0.3, .8)
+			};
+			this.background = bg;
+		}
+		Tile[][] tiles = new Tile[40][10];
 	    for (int row = 0; row<tiles.length; row++) {
 		    for (int column = 0; column<tiles[row].length; column++) {
 			    tiles[row][column] = Tile.BLANK;
 		    }
 	    }
 		
-		tiles[0][7] = Tile.FLOOR_CENTER;
-		tiles[1][7] = Tile.FLOOR_CENTER;
-		tiles[2][7] = Tile.FLOOR_CENTER;
-		tiles[3][7] = Tile.FLOOR_CENTER;
-		tiles[4][7] = Tile.FLOOR_CENTER;
-		tiles[5][7] = Tile.FLOOR_CENTER;
-		tiles[6][7] = Tile.FLOOR_CENTER;
-		tiles[7][7] = Tile.FLOOR_CENTER;
-		tiles[8][7] = Tile.FLOOR_CENTER;
-		tiles[9][7] = Tile.FLOOR_CENTER;
-		tiles[10][7] = Tile.FLOOR_CENTER;
-		tiles[11][7] = Tile.FLOOR_CENTER;
-		tiles[12][7] = Tile.FLOOR_CENTER;
-		tiles[13][7] = Tile.FLOOR_CENTER;
-		tiles[14][7] = Tile.FLOOR_CENTER;
+	    int c = 0;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.GRASS;
+		tiles[c][8] = Tile.FLOOR_LEFT;
+		tiles[c][9] = Tile.MUD_WALL_BOTTOM_LEFT;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.GRASS;
+		tiles[c][7] = Tile.FLOOR_LEFT;
+		tiles[c][8] = Tile.MUD_WALL_BOTTOM_LEFT;
+		tiles[c][9] = Tile.MUD;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.GRASS;
+		tiles[c][7] = Tile.FLOOR_RIGHT;
+		tiles[c][8] = Tile.WALL_RIGHT;
+		tiles[c][9] = Tile.MUD_WALL_BOTTOM_RIGHT;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
+		tiles[c][0] = Tile.BLANK;
+		tiles[c][1] = Tile.BLANK;
+		tiles[c][2] = Tile.BLANK;
+		tiles[c][3] = Tile.BLANK;
+		tiles[c][4] = Tile.BLANK;
+		tiles[c][5] = Tile.BLANK;
+		tiles[c][6] = Tile.BLANK;
+		tiles[c][7] = Tile.BLANK;
+		tiles[c][8] = Tile.GRASS;
+		tiles[c][9] = Tile.FLOOR_CENTER;
+		c++;
 
 		this.tiles = tiles;
+	}
+	
+	public boolean isColliding(Rectangle2D.Double rectangle) {
+		boolean colliding = false;
+		int tileSize = Constants.TILE_SIZE;
+		//create a loop which will only check squares on the map the rectangle is near
+		int rowFrom = (int) Math.floor(rectangle.x / tileSize);
+		int rowTo = (int) Math.floor((rectangle.x + rectangle.width) / tileSize) + 1;
+		int columnFrom = (int) Math.floor(rectangle.y / tileSize);
+		int columnTo = (int) Math.floor((rectangle.y + rectangle.height) / tileSize) + 1;
+		
+		for (int row = rowFrom; row <= rowTo; row++) {
+			for (int column = columnFrom; column <= columnTo; column++) {
+				//don't check tiles that are off the map
+				if (row >= tiles.length || row < 0 || column >= tiles[0].length || column < 0) continue;
+				if (isSolid(this.tiles[row][column])) {
+					Rectangle2D.Double tile = new Rectangle2D.Double(row * tileSize, column * tileSize, tileSize, tileSize);
+					if (rectangle.intersects(tile)) colliding = true;
+				}
+			}
+		}
+
+		
+		//inside the loop, check for tile type and only check collision if tile is solid
+		
+		return colliding;
+
+	}
+
+	private boolean isSolid(Tile tile) {
+		switch (tile) {
+		case FLOOR_LEFT:
+		case FLOOR_CENTER:
+		case FLOOR_RIGHT:
+		case WALL_LEFT:
+		case WALL_RIGHT:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public void update() {
+		
+	}
+	
+	public BufferedImage drawBackground() {
+		BufferedImage bimage = new BufferedImage(Constants.GAME_RESOLUTION_X, Constants.GAME_RESOLUTION_Y, BufferedImage.TYPE_INT_ARGB); 
+		
+	    Graphics2D g2d = bimage.createGraphics();
+	    for (Background background: this.background) {
+	    	g2d.drawImage(background.getBackground(), 0, 0, Constants.GAME_RESOLUTION_X, Constants.GAME_RESOLUTION_Y, null);
+	    }
+	    g2d.dispose();
+
+	    return bimage;
 	}
 }
