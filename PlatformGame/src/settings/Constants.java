@@ -15,7 +15,6 @@ public class Constants {
 	public static final double GAME_UPS = 1000000000 / 1000; // updates per second
 	public static final double GAME_FPS = 1000000000 / 60; // frames per second (graphics)
 
-	public static final int GAME_TICK_SPEED = 1;
 	public static final double SPEED_INCREMENT = 0.003;
 	public static final double SPEED_DECREMENT = 0.001;
 	public static final double MAX_WALK_SPEED = 0.1;

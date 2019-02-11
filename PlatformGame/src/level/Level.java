@@ -33,40 +33,7 @@ public class Level {
 	}
 	
 	private BufferedImage getTile(Tile tile) {
-		BufferedImage imgTile;
-		switch (tile) {
-		case FLOOR_LEFT:
-			imgTile = sprite.getSprite(15, 7);
-			break;
-		case FLOOR_CENTER:
-			imgTile = sprite.getSprite(16, 7);
-			break;
-		case FLOOR_RIGHT:
-			imgTile = sprite.getSprite(17, 7);
-			break;
-		case GRASS:
-			imgTile = sprite.getSprite(16, 6);
-			break;
-		case MUD:
-			imgTile = sprite.getSprite(11, 6);
-			break;
-		case WALL_LEFT:
-			imgTile = sprite.getSprite(9, 6);
-			break;
-		case WALL_RIGHT:
-			imgTile = sprite.getSprite(13, 6);
-			break;
-		case MUD_WALL_BOTTOM_LEFT:
-			imgTile = sprite.getSprite(15, 9);
-			break;
-		case MUD_WALL_BOTTOM_RIGHT:
-			imgTile = sprite.getSprite(17, 9);
-			break;
-		default:
-			imgTile = sprite.getSprite(5, 0);
-		}
-		return imgTile;
-		
+		return sprite.getSprite(tile.getX(), tile.getY());
 	}
 	
 	private void loadLevel() {
@@ -322,7 +289,6 @@ public class Level {
 	}
 	
 	public boolean isColliding(Rectangle2D.Double rectangle) {
-		boolean colliding = false;
 		int tileSize = Constants.TILE_SIZE;
 		//create a loop which will only check squares on the map the rectangle is near
 		int rowFrom = (int) Math.floor(rectangle.x / tileSize);
@@ -334,9 +300,9 @@ public class Level {
 			for (int column = columnFrom; column <= columnTo; column++) {
 				//don't check tiles that are off the map
 				if (row >= tiles.length || row < 0 || column >= tiles[0].length || column < 0) continue;
-				if (isSolid(this.tiles[row][column])) {
+				if (this.tiles[row][column].isCollidable()) {
 					Rectangle2D.Double tile = new Rectangle2D.Double(row * tileSize, column * tileSize, tileSize, tileSize);
-					if (rectangle.intersects(tile)) colliding = true;
+					if (rectangle.intersects(tile)) return true;
 				}
 			}
 		}
@@ -344,21 +310,8 @@ public class Level {
 		
 		//inside the loop, check for tile type and only check collision if tile is solid
 		
-		return colliding;
+		return false;
 
-	}
-
-	private boolean isSolid(Tile tile) {
-		switch (tile) {
-		case FLOOR_LEFT:
-		case FLOOR_CENTER:
-		case FLOOR_RIGHT:
-		case WALL_LEFT:
-		case WALL_RIGHT:
-			return true;
-		default:
-			return false;
-		}
 	}
 
 	public void update() {
