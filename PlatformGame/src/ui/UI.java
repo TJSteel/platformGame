@@ -54,6 +54,9 @@ public class UI extends JFrame {
 			case KeyEvent.VK_DOWN:
 				Game.player.keyDown = true;
 				break;
+			case KeyEvent.VK_Z:
+				Game.player.keyRun = true;
+				break;
 			}
 		}
 		public void keyReleased(KeyEvent e) {
@@ -70,6 +73,9 @@ public class UI extends JFrame {
 				break;
 			case KeyEvent.VK_DOWN:
 				Game.player.keyDown = false;
+				break;
+			case KeyEvent.VK_Z:
+				Game.player.keyRun = false;
 				break;
 			}
 		}

@@ -58,11 +58,11 @@ public class Level {
 		tiles[c][2] = Tile.BLANK;
 		tiles[c][3] = Tile.BLANK;
 		tiles[c][4] = Tile.BLANK;
-		tiles[c][5] = Tile.BLANK;
-		tiles[c][6] = Tile.BLANK;
-		tiles[c][7] = Tile.BLANK;
-		tiles[c][8] = Tile.GRASS;
-		tiles[c][9] = Tile.FLOOR_CENTER;
+		tiles[c][5] = Tile.FLOOR_LEFT;
+		tiles[c][6] = Tile.WALL_RIGHT;
+		tiles[c][7] = Tile.WALL_RIGHT;
+		tiles[c][8] = Tile.WALL_RIGHT;
+		tiles[c][9] = Tile.MUD_WALL_BOTTOM_RIGHT;
 		c++;
 		tiles[c][0] = Tile.BLANK;
 		tiles[c][1] = Tile.BLANK;
