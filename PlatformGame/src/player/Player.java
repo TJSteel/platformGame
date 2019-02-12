@@ -4,12 +4,13 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import game.Game;
+import physics.Physics;
 import settings.Constants;
 import sprite.Animation;
 import sprite.Sprite;
 
 public class Player {
-	public boolean keyLeft = false, keyRight = false, keyUp = false, keyDown = false;
+	public boolean keyLeft = false, keyRight = false, keyUp = false, keyDown = false, keyRun = false;
 	private short health = 100;
 	@SuppressWarnings("unused")
 	private short lives = 3;
@@ -18,6 +19,7 @@ public class Player {
 	private double positionX = 10;
 	private double positionY = 0;
 	private Sprite sprite = new Sprite("adventurerSheet", Constants.SPRITE_SIZE_X, Constants.SPRITE_SIZE_Y);
+	private double lastUpdate = 0;
 	// {{ Animations
 	private Animation idle = new Animation("idle", new BufferedImage[] {
 			sprite.getSprite(8, 9),
@@ -77,23 +79,25 @@ public class Player {
 	}
 	
 	public void update() {
-		updatePlayerInputs();
-		applyPhysics();
+		if (getLastUpdate() == 0) setLastUpdate();
+		
 		getCurrentAnimation().updateFrame();
+		updatePlayerInputs();
+		applyEnvironmentalForces();
 		
 		Rectangle2D.Double legs = getLegs();
-		Rectangle2D.Double legsX = new Rectangle2D.Double(legs.getX() + speedX, legs.getY(), legs.getWidth(), legs.getHeight());
-		Rectangle2D.Double legsY = new Rectangle2D.Double(legs.getX(), legs.getY() + speedY, legs.getWidth(), legs.getHeight());
 		
-		if (Game.level.isColliding(legsX) == true) {
+		if (Game.level.isColliding(new Rectangle2D.Double(legs.getX() + speedX, legs.getY(), legs.getWidth(), legs.getHeight())) == true) {
 			stopped();
 			speedX = 0;
 		} else {
 			positionX += speedX;
 		}
-		
-		if (Game.level.isColliding(legsY) == true) {
-			if (speedY > Constants.GRAVITY) {
+		// need to get it again in case it changed when moving on the X axis
+		legs = getLegs();
+
+		if (Game.level.isColliding(new Rectangle2D.Double(legs.getX(), legs.getY() + speedY, legs.getWidth(), legs.getHeight())) == true) {
+			if (speedY > Physics.GRAVITY/Constants.GAME_UPS*2) {
 				landed();
 			}
 			speedY = 0;
@@ -101,6 +105,7 @@ public class Player {
 			positionY += speedY;
 		}
 		
+		setLastUpdate();
 	}
 	public Rectangle2D.Double getLegs() {
 		return new Rectangle2D.Double(this.positionX + 21, this.positionY + 30, 9d, 5d);
@@ -108,9 +113,14 @@ public class Player {
 	private void updatePlayerInputs() {
 		if (keyLeft == true ^ keyRight == true) {
 			if (keyLeft == true) {
-				moveLeft();
+				this.direction = Direction.LEFT;
 			} else {
-				moveRight();
+				this.direction = Direction.RIGHT;
+			}
+			if (keyRun == true) {
+				run();
+			} else {
+				walk();				
 			}
 		} 
 		
@@ -124,23 +134,19 @@ public class Player {
 
 	}
 	
-	private void moveLeft() {
-		speedX -= Constants.SPEED_INCREMENT;
-		if (speedX < -Constants.MAX_WALK_SPEED) speedX = -Constants.MAX_WALK_SPEED;
-		direction = Direction.LEFT;
+	private void walk() {
+		speedX = Physics.addWalkSpeed(speedX, getTimeElapsed(), this.direction);
 		setCurrentAnimation(walk);
 	}
-	
-	private void moveRight() {
-		speedX += Constants.SPEED_INCREMENT;
-		if (speedX > Constants.MAX_WALK_SPEED) speedX = Constants.MAX_WALK_SPEED;
-		direction = Direction.RIGHT;
-		setCurrentAnimation(walk);
+
+	private void run() {
+		speedX = Physics.addRunSpeed(speedX, getTimeElapsed(), this.direction);
+		setCurrentAnimation(run);
 	}
 	
 	private void jump() {
 		if (speedY == 0) {
-			speedY -= Constants.JUMP_SPEED;
+			speedY -= Physics.JUMP_ACCELERATION;
 			setCurrentAnimation(jump);
 			keyUp = false;
 		}
@@ -152,7 +158,7 @@ public class Player {
 	
 
 	private void landed() {
-		if (speedY >= Constants.MAX_FALL_SPEED) {
+		if (speedY >= Physics.TERMINAL_VELOCITY) {
 			setCurrentAnimation(slide);
 		} else {
 			setCurrentAnimation(idle);
@@ -168,27 +174,17 @@ public class Player {
 		setCurrentAnimation(fall);
 	}
 
-	private void applyPhysics() {
+	private void applyEnvironmentalForces() {
 		//slow down character
-		if (speedX > 0) {
-			if (speedX <= Constants.SPEED_DECREMENT) {
-				stopped();
-			} else {
-				speedX -= Constants.SPEED_DECREMENT;
-			}
-		} else if (speedX < 0) {
-			if (speedX >= -Constants.SPEED_DECREMENT) {
-				stopped();
-			} else {
-				speedX += Constants.SPEED_DECREMENT;
-			}
+		if (speedX != 0 && keyLeft == false && keyRight == false) {
+			speedX = Physics.addFriction(speedX, getTimeElapsed());
+			if (speedX == 0) stopped();
 		}
 
 		// apply gravity
-		speedY += Constants.GRAVITY;
-		if (speedY > Constants.MAX_FALL_SPEED)
-			speedY = Constants.MAX_FALL_SPEED;
-		if (speedY > Constants.GRAVITY) falling();
+		speedY = Physics.addGravity(speedY, getTimeElapsed());
+
+		if (speedY > Physics.GRAVITY) falling();
 	}
 	public void finishedAnimation() {
 		if (getCurrentAnimation().getName().equals("jump")) {
@@ -217,13 +213,18 @@ public class Player {
 	 * @param newAnimation the currentAnimation to set
 	 */
 	private void setCurrentAnimation(Animation newAnimation) {
-		if (newAnimation != getCurrentAnimation()) {
+		if (!newAnimation.getName().equals(getCurrentAnimation().getName())) {
 			
 			switch (newAnimation.getName()) {
+			case "idle":
+				if (speedY < 0) return;
+				if (speedX > Physics.FLOOR_FRICTION || speedX < -Physics.FLOOR_FRICTION) newAnimation = walk;
+			break;
 			case "walk":
+			case "run":
 				if (doingAction()) return;
 
-				if (speedX > Constants.MAX_WALK_SPEED || speedX < -Constants.MAX_WALK_SPEED) {
+				if (speedX > Physics.MAX_WALK_SPEED || speedX < -Physics.MAX_WALK_SPEED) {
 					newAnimation = run;
 				}
 			break;
@@ -238,9 +239,24 @@ public class Player {
 			}
 
 			if (!newAnimation.getName().equals(getCurrentAnimation().getName())){
+				System.out.println("current = " + getCurrentAnimation().getName() + ", new = " + newAnimation.getName());
 				newAnimation.reset();
 				this.currentAnimation = newAnimation;
 			}
 		}
 	}
+
+	private double getTimeElapsed() {
+		return (System.nanoTime() - this.lastUpdate) / 1000000000;
+	}
+
+	private double getLastUpdate() {
+		return lastUpdate;
+	}
+
+	private void setLastUpdate() {
+		this.lastUpdate = System.nanoTime();
+	}
+	
+	
 }

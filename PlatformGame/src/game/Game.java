@@ -48,8 +48,8 @@ public class Game extends JPanel{
         	//get the current time, add the time elapsed to the UPS and FPS variables in fractions of that variable
         	//eventually the variable will be >= 1 and then we will perform the frame update or graphics update
         	long currentTime = System.nanoTime();
-        	deltaUPS += (currentTime - startTime) / Constants.GAME_UPS;
-        	deltaFPS += (currentTime - startTime) / Constants.GAME_FPS;
+        	deltaUPS += (currentTime - startTime) / Constants.DELTA_UPS;
+        	deltaFPS += (currentTime - startTime) / Constants.DELTA_FPS;
         	startTime = currentTime;
         	
         	if (deltaUPS >=1) {

@@ -31,9 +31,7 @@ public class Background {
 		double imgRatio = (double)img.getWidth() / img.getHeight();
 		int width = (int)(this.height * imgRatio);
 		double x = this.x;
-		if (this.imageName.equals("sky")) {
-			System.out.println(imgRatio + " " + width + " " + x + " " + img.getWidth() + " " + img.getHeight() + " " + this.height);
-		}
+
 		//find location of first image to draw
 		while ((x + width) < 0) {
 			x += width;
