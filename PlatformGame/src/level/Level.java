@@ -284,6 +284,17 @@ public class Level {
 		tiles[c][8] = Tile.GRASS;
 		tiles[c][9] = Tile.FLOOR_CENTER;
 		c++;
+		tiles[c][0] = Tile.WALL_LEFT;
+		tiles[c][1] = Tile.WALL_LEFT;
+		tiles[c][2] = Tile.WALL_LEFT;
+		tiles[c][3] = Tile.WALL_LEFT;
+		tiles[c][4] = Tile.WALL_LEFT;
+		tiles[c][5] = Tile.WALL_LEFT;
+		tiles[c][6] = Tile.WALL_LEFT;
+		tiles[c][7] = Tile.WALL_LEFT;
+		tiles[c][8] = Tile.WALL_LEFT;
+		tiles[c][9] = Tile.WALL_LEFT;
+		c++;
 
 		this.tiles = tiles;
 	}

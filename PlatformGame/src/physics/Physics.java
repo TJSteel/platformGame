@@ -58,9 +58,12 @@ public class Physics {
 	}
 
 	public static double addWalkSpeed(double speedX, double secondsElapsed, Direction direction) {
+		// stops it dropping run speed back to walk speed instantly when slowing down
 		if (direction == Direction.RIGHT) {
+			if (speedX > MAX_WALK_SPEED) return speedX;
 			speedX += getWalkSpeed(secondsElapsed);
 		} else {
+			if (speedX < -MAX_WALK_SPEED) return speedX;
 			speedX -= getWalkSpeed(secondsElapsed);
 		}
 		if (speedX > MAX_WALK_SPEED) speedX = MAX_WALK_SPEED;
