@@ -27,9 +27,6 @@ public class Physics {
 	public static final double FLOOR_FRICTION = WALK_SPEED_ACCELERATION * .75;
 
 	public static final double JUMP_ACCELERATION = MAX_RUN_SPEED;
-
-	
-	private static final double WEIGHT = 0.0;
 	
 	private static double getGravity(double secondsElapsed) {
 		return GRAVITY * secondsElapsed;

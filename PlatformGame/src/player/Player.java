@@ -66,7 +66,6 @@ public class Player {
 	// }} Animations
 
 	private Animation currentAnimation = idle;
-	private Action currentAction = Action.IDLE;
 	private Direction direction = Direction.RIGHT;
 	
 	public boolean isAlive() {
