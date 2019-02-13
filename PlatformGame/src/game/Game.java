@@ -18,22 +18,21 @@ public class Game extends JPanel{
 	public static boolean running = true;
 	
 	public Game() {
-		this.setPreferredSize(new Dimension(Constants.SCREEN_RESOLUTION_X, Constants.SCREEN_RESOLUTION_Y));
+		this.setPreferredSize(new Dimension(Constants.FRAME_RESOLUTION_X, Constants.FRAME_RESOLUTION_Y));
 	}
 
 	@Override
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.scale(Constants.SIZE_MULTIPLIER, Constants.SIZE_MULTIPLIER);
-        g2d.setColor(Color.WHITE);
+        g2d.scale((double)Constants.FRAME_RESOLUTION_X / Constants.GAME_RESOLUTION_X, (double)Constants.FRAME_RESOLUTION_Y / Constants.GAME_RESOLUTION_Y);
+        g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, Constants.GAME_RESOLUTION_X, Constants.GAME_RESOLUTION_Y);
       	g2d.drawImage(level.drawBackground(), 0, 0, null);
       	g2d.drawImage(level.drawLevel(), 0, 0, null);
       	g2d.drawImage(player.getSprite(), (int)player.getX(), (int)player.getY(), null);
       	g2d.setColor(Color.RED);
       	if (Constants.DEBUG_MODE) g2d.draw(player.getLegs());
-        g2d.setColor(Color.BLACK);
     }
     
     public void run() {

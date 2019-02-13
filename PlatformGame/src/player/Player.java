@@ -239,7 +239,6 @@ public class Player {
 			}
 
 			if (!newAnimation.getName().equals(getCurrentAnimation().getName())){
-				System.out.println("current = " + getCurrentAnimation().getName() + ", new = " + newAnimation.getName());
 				newAnimation.reset();
 				this.currentAnimation = newAnimation;
 			}

@@ -1,6 +1,8 @@
 package ui;
 
 import java.awt.EventQueue;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -33,9 +35,17 @@ public class UI extends JFrame {
 	public UI() {
 		addKeyListener(new AL());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, Constants.SCREEN_RESOLUTION_X, Constants.SCREEN_RESOLUTION_Y);
+		setBounds(0, 0, Constants.FRAME_RESOLUTION_X, Constants.FRAME_RESOLUTION_Y);
 		setContentPane(Main.game);
 		setVisible(true);
+		
+        this.getRootPane().addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                // This is only called when the user releases the mouse button.
+                Constants.updateScreenResolution(getRootPane().getWidth(), getRootPane().getHeight());
+            }
+        });
+        pack();
 	}
 
 	public class AL extends KeyAdapter {
@@ -48,7 +58,7 @@ public class UI extends JFrame {
 			case KeyEvent.VK_RIGHT:
 				Game.player.keyRight = true;
 				break;
-			case KeyEvent.VK_UP:
+			case KeyEvent.VK_X:
 				Game.player.keyUp = true;
 				break;
 			case KeyEvent.VK_DOWN:
@@ -56,6 +66,9 @@ public class UI extends JFrame {
 				break;
 			case KeyEvent.VK_Z:
 				Game.player.keyRun = true;
+				break;
+			case KeyEvent.VK_ESCAPE:
+				System.exit(0);
 				break;
 			}
 		}
@@ -68,7 +81,7 @@ public class UI extends JFrame {
 			case KeyEvent.VK_RIGHT:
 				Game.player.keyRight = false;
 				break;
-			case KeyEvent.VK_UP:
+			case KeyEvent.VK_X:
 				Game.player.keyUp = false;
 				break;
 			case KeyEvent.VK_DOWN:
