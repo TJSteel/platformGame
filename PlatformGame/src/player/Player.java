@@ -16,7 +16,7 @@ public class Player {
 	private short lives = 3;
 	private double speedX = 0;
 	private double speedY = 0;
-	private double positionX = 10;
+	private double positionX = 60;
 	private double positionY = 0;
 	private Sprite sprite = new Sprite("adventurerSheet", Constants.SPRITE_SIZE_X, Constants.SPRITE_SIZE_Y);
 	private double lastUpdate = 0;
