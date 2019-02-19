@@ -15,10 +15,10 @@ public class Constants {
 	public static final double DELTA_UPS = 1000000000 / GAME_UPS; // updates per second converted to nanosecond intervals
 	public static final double DELTA_FPS = 1000000000 / GAME_FPS; // frames per second (graphics) converted to nanosecond intervals
 
-	public static final boolean DEBUG_MODE = false;
+	public static boolean DEBUG_MODE = false;
 	
 	public static void updateScreenResolution(int newFrameX, int newFrameY) {
-		System.out.print("newFrame = " + newFrameX + ", " + newFrameY);
+		if (Constants.DEBUG_MODE) System.out.print("newFrame = " + newFrameX + ", " + newFrameY);
 		int newX = GAME_RESOLUTION_X;
 		int newY = GAME_RESOLUTION_Y;
 
@@ -27,11 +27,11 @@ public class Constants {
 	    	newX *= 2;
 	    	newY *= 2;
 	    }
-		System.out.print(", newSize = " + newX + ", " + newY);
+	    if (Constants.DEBUG_MODE) System.out.print(", newSize = " + newX + ", " + newY);
 	    
 	    // first check if width is too big and needs scaling
 	    if (newX > newFrameX) {
-	    	System.out.print(", scalingX");
+	    	if (Constants.DEBUG_MODE) System.out.print(", scalingX");
 	        //scale width to fit
 	    	newX = newFrameX;
 	        //scale height to maintain aspect ratio
@@ -39,7 +39,7 @@ public class Constants {
 	    }
 	    // first check if width is too big and needs scaling
 	    if (newY > newFrameY) {
-	    	System.out.print(", scalingY");
+	    	if (Constants.DEBUG_MODE) System.out.print(", scalingY");
 	        //scale width to fit
 	    	newY = newFrameY;
 	        //scale height to maintain aspect ratio
@@ -48,7 +48,7 @@ public class Constants {
 
 	    FRAME_RESOLUTION_X = newX;
 	    FRAME_RESOLUTION_Y = newY;
-		System.out.println(", new, " + newX + ", " + newY);
+		if (Constants.DEBUG_MODE) System.out.println(", new, " + newX + ", " + newY);
 
 	}
 }
