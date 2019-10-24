@@ -12,7 +12,6 @@ import sprite.Sprite;
 public class Player {
 	public boolean keyLeft = false, keyRight = false, keyUp = false, keyDown = false, keyRun = false;
 	private short health = 100;
-	@SuppressWarnings("unused")
 	private short lives = 3;
 	private double speedX = 0;
 	private double speedY = 0;
@@ -176,7 +175,7 @@ public class Player {
 
 	private void applyEnvironmentalForces() {
 		//slow down character
-		if (speedX != 0 && keyLeft == false && keyRight == false) {
+		if (speedX != 0 && ((keyLeft == false && keyRight == false) || speedX > Physics.MAX_WALK_SPEED || speedX < -Physics.MAX_WALK_SPEED)) {
 			speedX = Physics.addFriction(speedX, getTimeElapsed());
 			if (speedX == 0) stopped();
 		}
@@ -186,6 +185,7 @@ public class Player {
 
 		if (speedY > Physics.GRAVITY) falling();
 	}
+	
 	public void finishedAnimation() {
 		if (getCurrentAnimation().getName().equals("jump")) {
 			setCurrentAnimation(fall);
@@ -257,5 +257,11 @@ public class Player {
 		this.lastUpdate = System.nanoTime();
 	}
 	
+	public short getLives() {
+		return this.lives;
+	}
+	public double getSpeed() {
+		return this.speedX;
+	}
 	
 }

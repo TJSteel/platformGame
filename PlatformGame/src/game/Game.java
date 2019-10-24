@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import level.Level;
+import main.Main;
 import player.Player;
 import settings.Constants;
 
@@ -32,14 +33,18 @@ public class Game extends JPanel{
       	g2d.drawImage(level.drawBackground(), 0, 0, null);
       	g2d.drawImage(level.drawLevel(), 0, 0, null);
       	g2d.drawImage(player.getSprite(), (int)player.getX()-level.getOffsetX(), (int)player.getY(), null);
-      	g2d.setColor(Color.RED);
-      	if (Constants.DEBUG_MODE) g2d.draw(player.getLegs());
+      	if (Main.ui != null) {
+      		g2d.drawImage(Main.ui.drawHUD(), 0, 0, null);      		
+      	}
+      	if (Constants.DEBUG_MODE) {
+      		g2d.setColor(Color.RED);
+      		g2d.draw(player.getLegs());
+      	}
     }
     
     public void run() {
     	long startTime = System.nanoTime();
     	double deltaUPS = 0, deltaFPS = 0;
-    	@SuppressWarnings("unused") //only used for debugging
 		int frames = 0, ticks = 0;
     	long timer = System.currentTimeMillis();
     	
