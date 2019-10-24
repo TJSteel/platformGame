@@ -1,16 +1,21 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import game.Game;
 import main.Main;
+import physics.Physics;
 import settings.Constants;
 
 public class UI extends JFrame {
@@ -92,6 +97,27 @@ public class UI extends JFrame {
 				break;
 			}
 		}
-	}	
+	}
+    
+	public BufferedImage drawHUD() {
+		BufferedImage bimage = new BufferedImage(Constants.GAME_RESOLUTION_X, Constants.GAME_RESOLUTION_Y, BufferedImage.TYPE_INT_ARGB); 
+		
+		Graphics2D g2d = bimage.createGraphics();
+		if (Game.player != null) {
+			g2d.setColor(Color.BLACK);
+			g2d.fillRect(0, 0, Constants.GAME_RESOLUTION_X, 20);
+			g2d.setColor(Color.WHITE);
+			Font font = new Font("Serif", Font.PLAIN, 14);
+			g2d.setFont(font);
+			double speed = Game.player.getSpeed();
+			speed = Physics.pixelsToMiles(speed) * 60 * 60;
+			speed = (int)(speed * 100) / 100d;
+			g2d.drawString("Lives: " + Game.player.getLives(), 15, 15);
+		}
+	    
+	    g2d.dispose();
+
+	    return bimage;
+	}
 	
 }

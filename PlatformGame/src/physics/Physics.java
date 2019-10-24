@@ -94,5 +94,12 @@ public class Physics {
 		return (PLAYER_HEIGHT_PIXELS / PLAYER_HEIGHT_METERS) * pixels;
 	}
 
+	public static double metersToMiles(double meters) {
+		return meters * 0.000621371; 
+	}
+	public static double pixelsToMiles(double pixels) {
+		double meters = pixelsToMeters(pixels);
+		return metersToMiles(meters);
+	}
 	
 }
