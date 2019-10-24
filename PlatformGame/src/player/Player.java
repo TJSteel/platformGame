@@ -15,7 +15,7 @@ public class Player {
 	private short lives = 3;
 	private double speedX = 0;
 	private double speedY = 0;
-	private double positionX = 60;
+	private double positionX = 0;
 	private double positionY = 0;
 	private Sprite sprite = new Sprite("adventurerSheet", Constants.SPRITE_SIZE_X, Constants.SPRITE_SIZE_Y);
 	private double lastUpdate = 0;
@@ -201,6 +201,8 @@ public class Player {
 	}
 	public double getX() { return positionX; }
 	public double getY() { return positionY; }
+	public void setX(double x) { this.positionX = x; }
+	public void setY(double y) { this.positionY = y; }
 
 	/**
 	 * @return the currentAnimation

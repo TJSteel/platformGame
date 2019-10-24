@@ -3,13 +3,18 @@ package level;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import game.Game;
 import settings.Constants;
 import sprite.Sprite;
+import tools.CustomFileReader;
 
 public class Level {
 	private Sprite sprite = new Sprite("tilesetSheet", Constants.TILE_SIZE, Constants.TILE_SIZE);
+	@SuppressWarnings("unused")
+	private String name;
+	@SuppressWarnings("unused")
 	private int levelNumber;
 	private Tile[][] tiles;
 	private Background[] background;
@@ -32,8 +37,7 @@ public class Level {
 	}
 
 	public Level(int levelNumber) {
-		this.levelNumber = levelNumber;
-		loadLevel();
+		loadLevel(levelNumber);
 	}
 	
 	public BufferedImage drawLevel() {
@@ -60,206 +64,49 @@ public class Level {
 		return sprite.getSprite(tile.getX(), tile.getY());
 	}
 	
-	private void loadLevel() {
-		if (levelNumber == 1) {
-			Background[] bg = {
-					new Background("sky", 0, 0, 1, 0.1),
-					new Background("clouds", 0, 0.4, 0.3, 0.3),
-					new Background("sea", 0, 0.7, 0.3, .5)
-			};
-			this.background = bg;
+	private void loadLevel(int levelNumber) {
+		String[] inputFile = CustomFileReader.readTextFile("src/level/level" + levelNumber + ".txt");
+		ArrayList<String> tileStrings = new ArrayList<String>();
+		// get settings of the level from the top of the file
+		
+		for (String s : inputFile) {
+			if (s.contains("levelNumber: ")) {
+				this.levelNumber = Integer.parseInt(s.substring(12).trim());
+			} else if (s.contains("name: ")) {
+				this.name = s.substring(5).trim();
+			} else if (s.contains("playerX: ")) {
+				Game.player.setX(Integer.parseInt(s.substring(8).trim()));
+			} else if (s.contains("playerY: ")) {
+				Game.player.setY(Integer.parseInt(s.substring(8).trim()));
+			} else if (s.contains("tiles:")) {
+				tileStrings.add(s.substring(6).trim());
+			}
 		}
-		Tile[][] tiles = new Tile[201][17];
-	    for (int row = 0; row<tiles.length; row++) {
-		    for (int column = 0; column<tiles[row].length; column++) {
-			    tiles[row][column] = Tile.BLANK;
+		
+		// get tiles from the remainder of the file
+		int columnCount = tileStrings.get(0).length(); 
+		int rowCount = tileStrings.size();
+
+		Tile[][] tiles = new Tile[columnCount][rowCount];
+	    
+		for (int row = 0; row < rowCount; row++) {
+		    for (int column = 0; column < columnCount; column++) {
+			    tiles[column][row] = Tile.getById(tileStrings.get(row).charAt(column));
 		    }
 	    }
 		
+
+		// not sure how to process this yet, possibly via the level file too
+		Background[] bg = {
+				new Background("sky", 0, 0, 1, 0.1),
+				new Background("clouds", 0, 0.4, 0.3, 0.3),
+				new Background("sea", 0, 0.7, 0.3, .5)
+		};
+		this.background = bg;
+		
+
+		
 	    this.scrollMarkerXMax = ((tiles.length)*Constants.TILE_SIZE) - Constants.GAME_RESOLUTION_X;
-	    
-	    int c = 0, r=0;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.GRASS;
-		tiles[c][r++] = Tile.FLOOR_CENTER;
-		c++; r=0;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.GRASS;
-		tiles[c][r++] = Tile.FLOOR_CENTER;
-		c++; r=0;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.GRASS;
-		tiles[c][r++] = Tile.FLOOR_CENTER;
-		c++; r=0;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.GRASS;
-		tiles[c][r++] = Tile.FLOOR_CENTER;
-		c++; r=0;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.GRASS;
-		tiles[c][r++] = Tile.FLOOR_CENTER;
-		c++; r=0;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.GRASS;
-		tiles[c][r++] = Tile.FLOOR_LEFT;
-		tiles[c][r++] = Tile.MUD_WALL_BOTTOM_LEFT;
-		c++; r=0;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.GRASS;
-		tiles[c][r++] = Tile.FLOOR_LEFT;
-		tiles[c][r++] = Tile.MUD_WALL_BOTTOM_LEFT;
-		tiles[c][r++] = Tile.MUD;
-		c++; r=0;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.GRASS;
-		tiles[c][r++] = Tile.FLOOR_RIGHT;
-		tiles[c][r++] = Tile.WALL_RIGHT;
-		tiles[c][r++] = Tile.MUD_WALL_BOTTOM_RIGHT;
-		c++; r=0;
-		while (c < 200) {
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.BLANK;
-			tiles[c][r++] = Tile.GRASS;
-			tiles[c][r++] = Tile.FLOOR_CENTER;
-			c++; r=0;
-		}
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.BLANK;
-		tiles[c][r++] = Tile.FLOOR_LEFT;
-		tiles[c][r++] = Tile.WALL_LEFT;
-		tiles[c][r++] = Tile.WALL_LEFT;
-		tiles[c][r++] = Tile.WALL_LEFT;
-		tiles[c][r++] = Tile.MUD_WALL_BOTTOM_LEFT;
 
 		this.tiles = tiles;
 	}
