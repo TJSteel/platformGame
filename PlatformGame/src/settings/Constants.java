@@ -1,5 +1,7 @@
 package settings;
 
+// testing adding and merging a branch
+
 public class Constants {
 	public static final int TILE_SIZE = 16;
 	public static final int SPRITE_SIZE_X = 50;
