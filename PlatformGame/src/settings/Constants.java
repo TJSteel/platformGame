@@ -46,8 +46,8 @@ public class Constants {
 	    	newX = (int)(newY * ((double)GAME_RESOLUTION_X / GAME_RESOLUTION_Y));
 	    }
 
-	    //FRAME_RESOLUTION_X = newX;
-	    //FRAME_RESOLUTION_Y = newY;
+	    FRAME_RESOLUTION_X = newX;
+	    FRAME_RESOLUTION_Y = newY;
 		if (Constants.DEBUG_MODE) System.out.println(", new, " + newX + ", " + newY);
 
 	}
